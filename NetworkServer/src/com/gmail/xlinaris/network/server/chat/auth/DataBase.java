@@ -48,14 +48,15 @@ public class DataBase {
     // -------- Вывод таблицы--------
     public static List<User> ReadDB() throws SQLException {
         resSet = statement.executeQuery("SELECT * FROM users");
-        List<User> USERS = null;
+        List<User> USERS= new java.util.ArrayList<>(List.of());
         int i = 0;
         while (resSet.next()) {
             int id = resSet.getInt("id");
             String name = resSet.getString("name");
             String login = resSet.getString("login");
             String password = resSet.getString("password");
-            USERS.add(i, new User(login, password, name));
+            assert USERS != null;
+            USERS.add(new User(login, password, name));
             System.out.println("ID = " + id);
             System.out.println("name = " + name);
             System.out.println("login = " + login);

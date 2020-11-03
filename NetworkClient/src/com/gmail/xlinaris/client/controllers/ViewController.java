@@ -34,6 +34,7 @@ public class ViewController {
     @FXML
     public void initialize() {
 
+//        usersList.setItems(FXCollections.observableArrayList(NetworkChatClient.USERS_TEST_DATA));
         usersList.setItems(FXCollections.observableArrayList(NetworkChatClient.USERS_TEST_DATA));
         sendButton.setOnAction(event -> sendMessage());
         textField.setOnAction(event -> sendMessage());

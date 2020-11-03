@@ -19,7 +19,8 @@ import java.util.List;
 
 public class NetworkChatClient extends Application {
 
-    public static final List<String> USERS_TEST_DATA = List.of("Oleg", "Alexey", "Peter");
+    //    public static final List<String> USERS_TEST_DATA = List.of("Oleg", "Alexey", "Peter");
+    public static final List<String> USERS_TEST_DATA = List.of();
 
     private Stage primaryStage;
     private Stage authDialogStage;
@@ -38,7 +39,6 @@ public class NetworkChatClient extends Application {
 
         openAuthDialog(primaryStage);
         AuthDialogController authController;
-
         createChatDialog(primaryStage);
 
     }
@@ -80,8 +80,6 @@ public class NetworkChatClient extends Application {
         });
 
         authDialogStage.show();
-
-
         AuthDialogController authController = authLoader.getController();
         authController.setNetwork(network);
         network.timeOffStart(authController, false);
@@ -105,7 +103,8 @@ public class NetworkChatClient extends Application {
     public void openChat() {
         authDialogStage.close();
         primaryStage.show();
-        primaryStage.setTitle("Chat client:" + network.getUsername());
+
+        primaryStage.setTitle("Chat client:" + network.getUsername());;
         network.waitMessages(viewController);
     }
 }

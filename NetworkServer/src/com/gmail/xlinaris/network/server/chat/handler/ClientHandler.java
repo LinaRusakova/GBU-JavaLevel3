@@ -36,9 +36,7 @@ public class ClientHandler {
         in = new ObjectInputStream(clientSocket.getInputStream());
         out = new ObjectOutputStream(clientSocket.getOutputStream());
 
-        //// Создаем отдельный поток для авторизации пользователей
-
-        Thread thread4ConnectionNewUsers = new Thread(new Runnable() {
+        Thread thread4ConnectiontToDB = new Thread(new Runnable() {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
                 try {
@@ -54,15 +52,14 @@ public class ClientHandler {
                 }
             }
         });
-       // thread4ConnectionNewUsers.setDaemon(true);
-        thread4ConnectionNewUsers.start();    //Запуск потока
+        thread4ConnectiontToDB.setDaemon(true);
+        thread4ConnectiontToDB.start();    //Запуск потока
 
 
-        try {
-            thread4ConnectionNewUsers.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //// Создаем отдельный поток для авторизации пользователей
+
+
+
 
     }
 
