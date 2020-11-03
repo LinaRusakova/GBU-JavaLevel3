@@ -139,11 +139,11 @@ class Box<T extends Fruit> {
         System.out.println(inMessage);
         if (((typeFruits == boxTarget.getTypeFruits() && countFruits != 0) || (boxTarget.countFruits == 0 && this.countFruits != 0)) && !this.equals(boxTarget)) { // проверка на соотвтствие типа фруктов, на наличие фруктов в коробке-источнике, на совпадине коробки-источника и коробки-цели
 
-        //вариант складывания в новую коробку по одному яблоку
-                    int numbers=this.fruitsInBox.size();
-                    for (int i = 0; i < numbers; i++) {
-                        boxTarget.receiveFruits(fruitsInBox.get(i));
-                    }
+            //вариант складывания в новую коробку по одному яблоку
+            int numbers = this.fruitsInBox.size();
+            for (int i = 0; i < numbers; i++) {
+                boxTarget.receiveFruits(fruitsInBox.get(i));
+            }
 
             fruitsInBox.clear(); //очищаем коробку из которой переложили все яблоки
             countFruits = fruitsInBox.size(); // обновляем значение поля коробки
