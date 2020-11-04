@@ -77,7 +77,9 @@ public class MyServer {
     }
 
     public synchronized void unsubscribe(ClientHandler handler) throws IOException {
+
         clients.remove(handler);
+       // ;
         List<String> usernames = getAllUsernames();
         broadcastMessage(null, Command.updateUsersListCommand(usernames));
 

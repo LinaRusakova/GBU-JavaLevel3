@@ -36,31 +36,30 @@ public class ClientHandler {
         in = new ObjectInputStream(clientSocket.getInputStream());
         out = new ObjectOutputStream(clientSocket.getOutputStream());
 
+        //// Создаем отдельный поток для авторизации пользователей
         Thread thread4ConnectiontToDB = new Thread(new Runnable() {
             public void run() //Этот метод будет выполняться в побочном потоке
             {
                 try {
                     authentication();
                     readMessages();
-                    System.out.println("Привет из побочного потока!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        closeConnection();
+                    } catch (IOException e) {
+                        System.err.println("Failed to close connection!");
+                    }
                 }
             }
         });
         thread4ConnectiontToDB.setDaemon(true);
         thread4ConnectiontToDB.start();    //Запуск потока
-
-
-        //// Создаем отдельный поток для авторизации пользователей
-
-
-
-
     }
 
     private void checkTimeout() throws IOException {
@@ -78,6 +77,7 @@ public class ClientHandler {
             }
             switch (command.getType()) {
                 case END: {
+                    clientSocket.close(); //тест
                     break;
                 }
                 case PRIVATE_MESSAGE: {
@@ -159,6 +159,7 @@ public class ClientHandler {
     private void closeConnection() throws IOException {
         myServer.unsubscribe(this);
         clientSocket.close();
+
     }
 
 

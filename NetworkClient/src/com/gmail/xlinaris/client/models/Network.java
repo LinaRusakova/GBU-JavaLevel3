@@ -54,8 +54,8 @@ public class Network {
     volatile boolean stopTimerFlag = false; //flag for cancel timer
     volatile boolean flagStop = false; //flag for close client window
 
-    public void timeOffStart(AuthDialogController authDialog, boolean startflag) throws IOException, InterruptedException {
-        flag = startflag;
+    public void timeOffStart(AuthDialogController authDialog, boolean startFlag) throws IOException, InterruptedException {
+        flag = startFlag;
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             int t = 120; //Time for chat authorization (sec).
@@ -116,6 +116,7 @@ public class Network {
         Command command = Command.publicMessageCommand(username, message);
         sendCommand(command);
     }
+
 
     private void sendCommand(Command command) throws IOException {
         outputStream.writeObject(command);

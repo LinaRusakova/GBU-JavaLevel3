@@ -3,6 +3,7 @@ package com.gmail.xlinaris.client;
 import com.gmail.xlinaris.client.controllers.AuthDialogController;
 import com.gmail.xlinaris.client.controllers.ViewController;
 import com.gmail.xlinaris.client.models.Network;
+import com.gmail.xlinaris.network.clientserver.Command;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -73,6 +74,8 @@ public class NetworkChatClient extends Application {
         authDialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+
+
                 Platform.exit();
                 System.exit(0);
 
