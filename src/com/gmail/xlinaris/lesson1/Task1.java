@@ -31,16 +31,16 @@ class DemoTask1 {
         //Два тестовых массива различных типов
         Integer[] intArray = {1, 2, 3, 4, 5, 6};
         String[] strArray = {"один", "два", "три", "четыре", "пять", "шесть"};
-        Task1<Integer> integerTask1= new Task1<>(intArray);
-        Task1<String> stringTask1= new Task1<>(strArray);
+        Task1<Integer> integerTask1 = new Task1<>(intArray);
+        Task1<String> stringTask1 = new Task1<>(strArray);
 
-        System.out.println("First test array: "+integerTask1.show(intArray));
-        integerTask1.change2Items(2,4);
-        System.out.println("First test array after exchange 2 and 4 elements: "+integerTask1.show(intArray));
+        System.out.println("First test array: " + integerTask1.show(intArray));
+        integerTask1.change2Items(2, 4);
+        System.out.println("First test array after exchange 2 and 4 elements: " + integerTask1.show(intArray));
         System.out.println();
-        System.out.println("Second test array: "+stringTask1.show(strArray));
-        stringTask1.change2Items(2,4);
-        System.out.println("Second test array after exchange 2 and 4 elements: "+stringTask1.show(strArray));
+        System.out.println("Second test array: " + stringTask1.show(strArray));
+        stringTask1.change2Items(2, 4);
+        System.out.println("Second test array after exchange 2 and 4 elements: " + stringTask1.show(strArray));
         System.out.println();
     }
 
