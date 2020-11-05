@@ -2,11 +2,15 @@ package com.gmail.xlinaris.client.controllers;
 
 import com.gmail.xlinaris.client.models.Network;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import com.gmail.xlinaris.client.NetworkChatClient;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
@@ -17,6 +21,8 @@ public class ViewController {
 
     @FXML
     public ListView<String> usersList;
+    public TextField newNickSet;
+    public Button changeNickButton;
 
     @FXML
     private Button sendButton;
@@ -38,7 +44,8 @@ public class ViewController {
         usersList.setItems(FXCollections.observableArrayList(NetworkChatClient.USERS_TEST_DATA));
         sendButton.setOnAction(event -> sendMessage());
         textField.setOnAction(event -> sendMessage());
-
+//        changeNickButton.setOnAction(event -> sendNick());
+//        newNickSet.setOnAction(event -> sendNick());
 //        usersList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //                selectedRecipient = newValue;
 //        });
@@ -61,11 +68,13 @@ public class ViewController {
                     } else {
                         selectionModel.select(index);
                         selectedRecipient = cell.getItem();
+
                         privateMessage = "Private message for @" + selectedRecipient + ": ";
                         target.setWrapText(true);
                         target.setText(privateMessage); //String into textfield when answer to user from list of users.
+                        cell.setItem("New user");
 
-                        //selectionModel.clearSelection(index);
+                        selectionModel.clearSelection(index);
                     }
                     event.consume();
                 }
@@ -73,6 +82,7 @@ public class ViewController {
             return cell;
         });
     }
+
 
     private void sendMessage() {
 
@@ -103,12 +113,17 @@ public class ViewController {
 
     public void appendMessage(String message) {
         String timestamp = DateFormat.getInstance().format(new Date());
+
         chatHistory.appendText(timestamp);
         chatHistory.appendText(System.lineSeparator());
         chatHistory.appendText(message);
         chatHistory.appendText(System.lineSeparator());
         chatHistory.appendText(System.lineSeparator());
+
+        // TODO method writeChatToFileHistory(history4FileSave);
+
     }
+
 
     public void showError(String title, String message) {
         NetworkChatClient.showNetworkError(message, title);
@@ -116,5 +131,11 @@ public class ViewController {
 
     public void updateUsers(List<String> users) {
         usersList.setItems(FXCollections.observableArrayList(users));
+    }
+
+    public void changeNick(ActionEvent actionEvent) {
+    }
+
+    public void newNickSet(ActionEvent actionEvent) {
     }
 }
