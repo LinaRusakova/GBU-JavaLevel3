@@ -8,10 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import com.gmail.xlinaris.client.NetworkChatClient;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +109,7 @@ public class ViewController {
     }
 
     public void appendMessage(String message) {
+        String history4FileSave = "";
         String timestamp = DateFormat.getInstance().format(new Date());
 
         chatHistory.appendText(timestamp);
@@ -119,9 +117,38 @@ public class ViewController {
         chatHistory.appendText(message);
         chatHistory.appendText(System.lineSeparator());
         chatHistory.appendText(System.lineSeparator());
+        history4FileSave=history4FileSave.concat(timestamp + "\n" + message);
 
-        // TODO method writeChatToFileHistory(history4FileSave);
+        // method writeChatToFileHistory(history4FileSave);
+        writeChatToFileHistory(history4FileSave, 1);
+    }
+//TODO method readChatFromFileHistory(Last100LinesOfHistoryChat)
 
+    private static void writeChatToFileHistory(String data, int noOfLines) {
+        File file = null;
+
+        file = new File("ChatHistory.txt");
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+
+        String dataWithNewLine = data + System.getProperty("line.separator");
+        try {
+            fileWriter = new FileWriter(file,true);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            for (int i = noOfLines; i > 0; i--) {
+                bufferedWriter.write(dataWithNewLine);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bufferedWriter.close();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
