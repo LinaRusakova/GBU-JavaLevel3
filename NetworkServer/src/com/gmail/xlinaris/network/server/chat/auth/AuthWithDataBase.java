@@ -9,11 +9,6 @@ public class AuthWithDataBase implements AuthService {
 
     private static List<User> USERS = null;
 
-    //    private static final List<User> USERS = List.of(
-//            new User("login1", "pass1", "Oleg"),
-//            new User("login2", "pass2", "Alexey"),
-//            new User("login3", "pass3", "Peter")
-//    );
     @Override
     public void start() {
         try {
@@ -21,15 +16,14 @@ public class AuthWithDataBase implements AuthService {
             DataBase.CreateDB();
            // DataBase.WriteDB();
             USERS = DataBase.ReadDB(); // TO DO привести к списку LIST
-        } catch (SQLException throwable) {
+        } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
+
     @Override
-    public String getUsernameByLoginAndPassword(String login, String password) throws SQLException, ClassNotFoundException {
+    public String getUsernameByLoginAndPassword(String login, String password) throws SQLException {
         DataBase.ReadDB();
 
         for (User user : USERS) {

@@ -4,53 +4,44 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.3-internal"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.gmail.xlinaris.client.controllers.ViewController">
+<AnchorPane prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gmail.xlinaris.client.controllers.ViewController">
     <children>
-        <SplitPane dividerPositions="0.2" prefHeight="450.0" prefWidth="750.0" AnchorPane.bottomAnchor="0.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <SplitPane dividerPositions="0.2" prefHeight="450.0" prefWidth="750.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0"
-                            minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                    <children>
-                        <ListView fx:id="usersList" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0"
-                                  prefWidth="172.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-                    </children>
-                </AnchorPane>
+<!--                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
+<!--                    <children>-->
+                  <VBox prefHeight="424.0" prefWidth="139.0">
+                     <children>
+                              <ListView fx:id="usersList" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="172.0" />
+                        <TextField fx:id="newNickSet" minHeight="20.0" minWidth="172.0" onAction="#newNickSet" prefHeight="55.0" prefWidth="176.0" promptText="Enter new Nick" />
+                        <Button fx:id="changeNickButton" mnemonicParsing="false" onAction="#changeNick" text="Change Nick" />
+                     </children>
+                  </VBox>
+<!--                    </children>-->
+<!--                </AnchorPane>-->
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="548.0">
                     <children>
-                        <SplitPane orientation="VERTICAL" prefHeight="398.0" prefWidth="486.0"
-                                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane orientation="VERTICAL" prefHeight="398.0" prefWidth="486.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <items>
                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                     <children>
-                                        <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="30.0"
-                                              prefWidth="200.0">
+                                        <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="30.0" prefWidth="200.0">
                                             <children>
                                                 <Label prefHeight="42.0" text="Чат">
                                                     <font>
-                                                        <Font size="18.0"/>
+                                                        <Font size="18.0" />
                                                     </font>
                                                 </Label>
                                             </children>
                                         </HBox>
-                                        <TextArea fx:id="chatHistory" editable="false"
-                                                  maxHeight="1.7976931348623157E308" wrapText="true"
-                                                  VBox.vgrow="ALWAYS"/>
+                                        <TextArea fx:id="chatHistory" editable="false" maxHeight="1.7976931348623157E308" wrapText="true" VBox.vgrow="ALWAYS" />
 
 
-                                        <Label fx:id="target" prefHeight="20.0" text="Message for all:"/>
-                                        <TextField fx:id="textField" maxHeight="1.7976931348623157E308"
-                                                   prefHeight="42.0" prefWidth="252.0"
-                                                   promptText="Insert your message here" HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="target" prefHeight="20.0" text="Message for all:" />
+                                        <TextField fx:id="textField" maxHeight="1.7976931348623157E308" prefHeight="42.0" prefWidth="252.0" promptText="Insert your message here" HBox.hgrow="ALWAYS" />
 
 
-                                        <Button fx:id="sendButton" maxHeight="1.7976931348623157E308"
-                                                mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                                                text="Send"/>
+                                        <Button fx:id="sendButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Send" />
                                     </children>
                                 </VBox>
                             </items>

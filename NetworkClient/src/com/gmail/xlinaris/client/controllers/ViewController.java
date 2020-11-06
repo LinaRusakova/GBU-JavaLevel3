@@ -9,6 +9,8 @@ import javafx.scene.input.MouseEvent;
 import com.gmail.xlinaris.client.NetworkChatClient;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -117,14 +119,35 @@ public class ViewController {
         chatHistory.appendText(message);
         chatHistory.appendText(System.lineSeparator());
         chatHistory.appendText(System.lineSeparator());
-        history4FileSave=history4FileSave.concat(timestamp + "\n" + message);
+        history4FileSave = history4FileSave.concat(timestamp + "\n" + message);
 
         // method writeChatToFileHistory(history4FileSave);
-        writeChatToFileHistory(history4FileSave, 1);
+        writeChatToFileHistory(history4FileSave);
     }
-//TODO method readChatFromFileHistory(Last100LinesOfHistoryChat)
 
-    private static void writeChatToFileHistory(String data, int noOfLines) {
+
+//method readChatFromFileHistory(number of LastLinesOfHistoryChat)
+
+    public void readChatFromFileHistory(int lastLines) {
+
+        try {
+            List<String> history = Files.readAllLines(Paths.get("ChatHistory.txt"));
+            int startReadLine = Math.max(history.size(), lastLines) - lastLines;
+            startReadLine = Math.max(0, startReadLine - 1);
+            for (int j = startReadLine; j < history.size(); j++) {
+                System.out.println(history.get(j));
+                chatHistory.appendText(history.get(j));
+                chatHistory.appendText(System.lineSeparator());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void writeChatToFileHistory(String data) {
         File file = null;
 
         file = new File("ChatHistory.txt");
@@ -133,12 +156,9 @@ public class ViewController {
 
         String dataWithNewLine = data + System.getProperty("line.separator");
         try {
-            fileWriter = new FileWriter(file,true);
+            fileWriter = new FileWriter(file, true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            for (int i = noOfLines; i > 0; i--) {
-                bufferedWriter.write(dataWithNewLine);
-            }
-
+            bufferedWriter.write(dataWithNewLine);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

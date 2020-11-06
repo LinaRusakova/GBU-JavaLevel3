@@ -4,9 +4,21 @@ import java.util.Objects;
 
 public class User {
 
-    private final String login;
-    private final String password;
-    private final String username;
+    private String login;
+    private  String password;
+    private  String username;
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public User(String login, String password, String username) {
         this.login = login;

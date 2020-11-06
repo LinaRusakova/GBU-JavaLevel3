@@ -3,17 +3,14 @@ package com.gmail.xlinaris.client;
 import com.gmail.xlinaris.client.controllers.AuthDialogController;
 import com.gmail.xlinaris.client.controllers.ViewController;
 import com.gmail.xlinaris.client.models.Network;
-import com.gmail.xlinaris.network.clientserver.Command;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.List;
 
@@ -55,11 +52,13 @@ public class NetworkChatClient extends Application {
 
         viewController = mainLoader.getController();
         viewController.setNetwork(network);
+        ViewController.writeChatToFileHistory("***Клиент подключен***"); //создаем файл истории чата на тот случай, если он был удален пользователем.
+        viewController.readChatFromFileHistory(100); //загружаем в чат историю сообщений (100 записей)
 
         primaryStage.setOnCloseRequest(event -> network.close());
     }
 
-    private void openAuthDialog(Stage primaryStage) throws java.io.IOException, InterruptedException {
+    private void openAuthDialog(Stage primaryStage) throws java.io.IOException {
         FXMLLoader authLoader = new FXMLLoader();
 
         authLoader.setLocation(NetworkChatClient.class.getResource("views/authDialog.fxml"));
@@ -71,15 +70,9 @@ public class NetworkChatClient extends Application {
         authDialogStage.initOwner(primaryStage);
         Scene scene = new Scene(authDialogPanel);
         authDialogStage.setScene(scene);
-        authDialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-
-
-                Platform.exit();
-                System.exit(0);
-
-            }
+        authDialogStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
         });
 
         authDialogStage.show();
@@ -107,7 +100,7 @@ public class NetworkChatClient extends Application {
         authDialogStage.close();
         primaryStage.show();
 
-        primaryStage.setTitle("Chat client:" + network.getUsername());;
+        primaryStage.setTitle("Chat client:" + network.getUsername());
         network.waitMessages(viewController);
     }
 }
