@@ -2,12 +2,15 @@ package com.gmail.xlinaris.client.controllers;
 
 import com.gmail.xlinaris.client.models.Network;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import com.gmail.xlinaris.client.NetworkChatClient;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +20,8 @@ public class ViewController {
 
     @FXML
     public ListView<String> usersList;
+    public TextField newNickSet;
+    public Button changeNickButton;
 
     @FXML
     private Button sendButton;
@@ -38,7 +43,8 @@ public class ViewController {
         usersList.setItems(FXCollections.observableArrayList(NetworkChatClient.USERS_TEST_DATA));
         sendButton.setOnAction(event -> sendMessage());
         textField.setOnAction(event -> sendMessage());
-
+//        changeNickButton.setOnAction(event -> sendNick());
+//        newNickSet.setOnAction(event -> sendNick());
 //        usersList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //                selectedRecipient = newValue;
 //        });
@@ -61,11 +67,13 @@ public class ViewController {
                     } else {
                         selectionModel.select(index);
                         selectedRecipient = cell.getItem();
+
                         privateMessage = "Private message for @" + selectedRecipient + ": ";
                         target.setWrapText(true);
                         target.setText(privateMessage); //String into textfield when answer to user from list of users.
+                        cell.setItem("New user");
 
-                        //selectionModel.clearSelection(index);
+                        selectionModel.clearSelection(index);
                     }
                     event.consume();
                 }
@@ -73,6 +81,7 @@ public class ViewController {
             return cell;
         });
     }
+
 
     private void sendMessage() {
 
@@ -102,13 +111,66 @@ public class ViewController {
     }
 
     public void appendMessage(String message) {
+        String history4FileSave = "";
         String timestamp = DateFormat.getInstance().format(new Date());
+
         chatHistory.appendText(timestamp);
         chatHistory.appendText(System.lineSeparator());
         chatHistory.appendText(message);
         chatHistory.appendText(System.lineSeparator());
         chatHistory.appendText(System.lineSeparator());
+        history4FileSave = history4FileSave.concat(timestamp + "\n" + message);
+
+        // method writeChatToFileHistory(history4FileSave);
+        writeChatToFileHistory(history4FileSave);
     }
+
+
+//method readChatFromFileHistory(number of LastLinesOfHistoryChat)
+
+    public void readChatFromFileHistory(int lastLines) {
+
+        try {
+            List<String> history = Files.readAllLines(Paths.get("ChatHistory.txt"));
+            int startReadLine = Math.max(history.size(), lastLines) - lastLines;
+            startReadLine = Math.max(0, startReadLine - 1);
+            for (int j = startReadLine; j < history.size(); j++) {
+                System.out.println(history.get(j));
+                chatHistory.appendText(history.get(j));
+                chatHistory.appendText(System.lineSeparator());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void writeChatToFileHistory(String data) {
+        File file = null;
+
+        file = new File("ChatHistory.txt");
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+
+        String dataWithNewLine = data + System.getProperty("line.separator");
+        try {
+            fileWriter = new FileWriter(file, true);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(dataWithNewLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bufferedWriter.close();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void showError(String title, String message) {
         NetworkChatClient.showNetworkError(message, title);
@@ -116,5 +178,11 @@ public class ViewController {
 
     public void updateUsers(List<String> users) {
         usersList.setItems(FXCollections.observableArrayList(users));
+    }
+
+    public void changeNick(ActionEvent actionEvent) {
+    }
+
+    public void newNickSet(ActionEvent actionEvent) {
     }
 }

@@ -25,6 +25,24 @@ public class ClientHandler {
     private ObjectOutputStream out;
 
     private String username;
+    private String login;
+    private String password;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public ClientHandler(MyServer myServer, Socket clientSocket) {
         this.myServer = myServer;
@@ -37,24 +55,18 @@ public class ClientHandler {
         out = new ObjectOutputStream(clientSocket.getOutputStream());
 
         //// Создаем отдельный поток для авторизации пользователей
-        Thread thread4ConnectiontToDB = new Thread(new Runnable() {
-            public void run() //Этот метод будет выполняться в побочном потоке
-            {
+        //Этот метод будет выполняться в побочном потоке
+        Thread thread4ConnectiontToDB = new Thread(() -> {
+            try {
+                authentication();
+                readMessages();
+            } catch (IOException | SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
                 try {
-                    authentication();
-                    readMessages();
+                    closeConnection();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        closeConnection();
-                    } catch (IOException e) {
-                        System.err.println("Failed to close connection!");
-                    }
+                    System.err.println("Failed to close connection!");
                 }
             }
         });
@@ -87,6 +99,7 @@ public class ClientHandler {
                     myServer.sendPrivateMessage(recipient, messageInfoCommand(privateMessage, username));
                     break;
                 }
+
                 case PUBLIC_MESSAGE: {
                     PublicMessageCommandData data = (PublicMessageCommandData) command.getData();
                     String sender = data.getSender();

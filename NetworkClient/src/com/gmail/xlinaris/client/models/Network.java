@@ -54,7 +54,7 @@ public class Network {
     volatile boolean stopTimerFlag = false; //flag for cancel timer
     volatile boolean flagStop = false; //flag for close client window
 
-    public void timeOffStart(AuthDialogController authDialog, boolean startFlag) throws IOException, InterruptedException {
+    public void timeOffStart(AuthDialogController authDialog, boolean startFlag) {
         flag = startFlag;
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -82,6 +82,8 @@ public class Network {
         timer.schedule(task, new Date(), 1000);
 
     }
+
+
 
     public String sendAuthCommand(String login, String password) {
         try {
@@ -118,6 +120,7 @@ public class Network {
     }
 
 
+
     private void sendCommand(Command command) throws IOException {
         outputStream.writeObject(command);
     }
@@ -128,61 +131,56 @@ public class Network {
     }
 
     public void waitMessages(ViewController viewController) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
+        Thread thread = new Thread(() -> {
+            try {
+                while (true) {
 
-                        Command command = readCommand();
-                        if (command == null) {
-                            viewController.showError("Server error", "Invalid command from server!");
-                            continue;
-                        }
-                        switch (command.getType()) {
-                            case INFO_MESSAGE: {
-                                MessageInfoCommandData data = (MessageInfoCommandData) command.getData();
-                                String message = data.getMessage();
-                                String sender = data.getSender();
-                                String formattedMsg = sender != null ? String.format("%s: %s", sender, message) : message;
-                                runLater(() -> {
-                                    viewController.appendMessage(formattedMsg);
-                                });
-                                break;
-                            }
-                            case ERROR: {
-                                ErrorCommandData data = (ErrorCommandData) command.getData();
-                                String errorMessage = data.getErrorMessage();
-                                runLater(() -> {
-                                    viewController.showError("Server error", errorMessage);
-                                });
-                                break;
-                            }
-                            case UPDATE_USERS_LIST: {
-                                UpdateUsersListCommandData data = (UpdateUsersListCommandData) command.getData();
-                                runLater(() -> {
-                                    viewController.updateUsers(data.getUsers());
-                                });
-                                break;
-                            }
-                            case TIMEOUT: {
-                                timeOutCommandData data = (timeOutCommandData) command.getData();
-                                flag = true;
-                                if (flagStop) {
-                                    Platform.exit();
-                                    socket.close();
-                                }
-                                break;
-                            }
-                            default:
-                                runLater(() -> {
-                                    viewController.showError("Server error", command.getType().toString());
-                                });
-                        }
+                    Command command = readCommand();
+                    if (command == null) {
+                        viewController.showError("Server error", "Invalid command from server!");
+                        continue;
                     }
-                } catch (IOException e) {
-                    System.out.println("Соединение было потеряно!");
+                    switch (command.getType()) {
+                        case INFO_MESSAGE: {
+                            MessageInfoCommandData data = (MessageInfoCommandData) command.getData();
+                            String message = data.getMessage();
+                            String sender = data.getSender();
+                            String formattedMsg = sender != null ? String.format("%s: %s", sender, message) : message;
+                            runLater(() -> {
+                                viewController.appendMessage(formattedMsg);
+                            });
+                            break;
+                        }
+                        case ERROR: {
+                            ErrorCommandData data = (ErrorCommandData) command.getData();
+                            String errorMessage = data.getErrorMessage();
+                            runLater(() -> {
+                                viewController.showError("Server error", errorMessage);
+                            });
+                            break;
+                        }
+                        case UPDATE_USERS_LIST: {
+                            UpdateUsersListCommandData data = (UpdateUsersListCommandData) command.getData();
+                            runLater(() -> viewController.updateUsers(data.getUsers()));
+                            break;
+                        }
+                        case TIMEOUT: {
+                            timeOutCommandData data = (timeOutCommandData) command.getData();
+                            flag = true;
+                            if (flagStop) {
+                                Platform.exit();
+                                socket.close();
+                            }
+                            break;
+                        }
+                        default:
+                            runLater(() -> {
+                                viewController.showError("Server error", command.getType().toString());
+                            });
+                    }
                 }
+            } catch (IOException e) {
+                System.out.println("Соединение было потеряно!");
             }
         });
         thread.setDaemon(true);

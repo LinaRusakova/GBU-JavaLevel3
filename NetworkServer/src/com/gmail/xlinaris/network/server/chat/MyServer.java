@@ -93,6 +93,22 @@ public class MyServer {
         return usernames;
     }
 
+    public synchronized void addNewName(ClientHandler handler, String newName) throws IOException {
+            List<User> user = List.of();
+        for (ClientHandler client : clients) {
+            if (user.contains(handler)) {
+                handler.setUsername(newName);
+            }
+
+            List<String> usernames = new ArrayList<>();
+            for (ClientHandler newclient : clients) {
+                usernames.add(newclient.getUsername());
+            }
+
+            broadcastMessage(null, Command.updateUsersListCommand(usernames));
+
+        }
+    }
 
 
     public synchronized boolean isNicknameAlreadyBusy(String username) {

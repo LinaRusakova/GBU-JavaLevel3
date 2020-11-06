@@ -11,6 +11,6 @@ public enum CommandType {
     END,
     UPDATE_USERS_LIST,
     TIMEOUT,
-
+    NEWNAME
 
 }
